@@ -20,9 +20,37 @@
 
 class FiniteAutomaton {
  public:
-  FiniteAutomaton(std::vector<std::string> file_path) {
-    for (int i = 0)
+  FiniteAutomaton(const std::vector<std::string>& file_path) : alphabet_(file_path[0]) {
+    number_states_ = static_cast<int>(file_path[1][0]);
+    start_state_ = static_cast<int>(file_path[2][0]);
+    for (int i = 3; i < file_path.size(); i++) {
+      int state_key = static_cast<int>(file_path[i][0]);
+      bool final_state = static_cast<bool>(file_path[i][2]);
+      int number_transitions = static_cast<int>(file_path[i][0]);
+      if (number_transitions = 0) {
+        State state(state_key, final_state, number_transitions);
+        states_.insert(state_key, State);
+      } else {
+        std::vector<std::string> transitions;
+        std::string transition;
+        int counter = 0;
+        for (int j = 6; 6 < file_path[i].length(); j++) {
+          if (file_path[i][j] != ' ') {
+            transition.push_back(file_path[i][j]);
+            counter++;
+          }
+          if (counter == 2) {
+            counter = 0;
+            transitions.emplace_back(transition);
+          }
+        }
+        State state(state_key, final_state, number_transitions, transitions);
+        states_.insert(state_key, state);
+      }
+    }
   }
+
+  
 
  private:
   Alphabet alphabet_;

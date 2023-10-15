@@ -22,18 +22,22 @@ class State {
   State(int number_state, bool final_state, int number_transitions, const std::vector<std::string>& transitions) {
     number_state_ = number_state;
     final_state_ = final_state;
-    if (number_transitions > 0) {
-      for (int i = 0; i < number_transitions; i++) {
-        Transition transition(transitions[i][0],static_cast<int>(transitions[i][2]));
+    number_transitions_ = number_transitions;
+    if (number_transitions_ > 0) {
+      for (int i = 0; i < number_transitions_; i++) {
+        Transition transition(transitions[i][0],static_cast<int>(transitions[i][1]));
         transitions_.insert(transition);
       }
     }
   }
 
+  State(int number_state, bool final_state, int number_transitions) : number_state_(number_state), final_state_(final_state),
+                                                                     number_transitions_(number_transitions) {}
 
  private:
   int number_state_;
   bool final_state_;
+  int number_transitions_;
   std::set<Transition> transitions_;
 };
 

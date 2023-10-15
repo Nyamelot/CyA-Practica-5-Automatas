@@ -19,7 +19,9 @@ class Alphabet {
   //Constructor
   Alphabet(std::string strings) {
     for (const auto& symbol : strings) {
-      alphabet_.emplace(symbol);
+      if (symbol != ' ') {
+        alphabet_.emplace(symbol);
+      }
     }
   }
   
