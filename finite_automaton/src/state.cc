@@ -11,18 +11,18 @@
  
 #include "state.h"
 
-bool State::operator>(const State& state1) {
+bool State::operator>(const State& state1) const {
   return id_ > state1.id_;
 }
 
-bool State::operator<(const State& state1) {
+bool State::operator<(const State& state1) const {
   return id_ < state1.id_;
 }
 
-bool State::operator==(const State& state1) {
+bool State::operator==(const State& state1) const {
   return id_ == state1.id_;
 }
 
-bool State::operator!=(const State& state1) {
+bool State::operator!=(const State& state1) const {
   return id_ != state1.id_;
 }

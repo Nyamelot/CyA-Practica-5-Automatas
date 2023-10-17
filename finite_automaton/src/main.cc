@@ -9,8 +9,22 @@
 
 #include <iostream>
 
+
+#include "finite_automaton.h"
+
 int main(int argc, char* argv[]) {
-  
-  
+  // auto automaton = FiniteAutomaton::CreateFromFile(argv[1]);
+  auto automaton = FiniteAutomaton(Alphabet(""));
+  automaton.AddTransition(State("q0"), State("q0"), '0');
+  automaton.AddTransition(State("q0"), State("q0"), '1');
+  automaton.AddTransition(State("q0"), State("q1"), '1');
+  automaton.AddTransition(State("q1"), State("q2"), '0');
+  automaton.AddTransition(State("q1"), State("q2"), '1');
+  automaton.AddTransition(State("q2"), State("q3"), '0');
+  automaton.AddTransition(State("q2"), State("q3"), '1');
+  automaton.SetFinal(State("q3"));
+  automaton.SetInitial(State("q0"));
+  std::cout << automaton.Crawl("&") << std::endl;
+
   return 0;
 }

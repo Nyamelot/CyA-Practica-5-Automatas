@@ -12,24 +12,60 @@
 #include "finite_automaton.h"
 #include "state.h"
 
-bool FiniteAutomaton::AddState(const State& state) {
+
+void FiniteAutomaton::AddState(const State& state) {
   if (!states_.count(state)) {
-    states_.emplace(state, std::vector<State>());
+    states_.insert({ state, std::set<State>() });
+    states_.at(state) = std::set<State>();
   }
 }
 
-bool FiniteAutomaton::AddTransition(const State& from, const State& to, const char& condition) {
+void FiniteAutomaton::AddTransition(const State& from, const State& to, const char& condition) {
   if (!states_.count(from)) {
     AddState(from);
   }
   if (!states_.count(to)) {
     AddState(to);
   }
-  if (!transitions_.count(std::make_pair(from, to))) {
+  if (!transitions_.count({ from, to })) {
     auto conditions = std::set { condition };
-    transitions_.emplace(std::make_pair(from, to), conditions);
-    states_.at(from).emplace_back(to);
+    transitions_.insert({ { from, to }, conditions });
+    states_.at(from).emplace(to);
   } else {
-    transitions_.at(std::make_pair(from, to)).emplace(condition);
+    transitions_.at({ from, to }).emplace(condition);
   }
 }
+
+void FiniteAutomaton::SetFinal(const State& state) {
+  final_states_.emplace(state);
+}
+
+void FiniteAutomaton::SetInitial(const State& state) {
+  initial_state_ = state;
+}
+
+bool FiniteAutomaton::Crawl(const std::string& input) {
+  auto current_states = std::set { initial_state_ };
+  for (const auto& symbol : input) {
+    auto next_states = std::set<State>();
+    for (const auto& current_state : current_states) {
+      for (const auto& adyecent_state : states_.at(current_state)) {
+        const auto& transition = transitions_.at({current_state, adyecent_state});
+        if (
+          transition.count(symbol) || 
+          transition.count('&')
+        ) {
+          next_states.emplace(adyecent_state);
+        }
+      }
+    }
+    current_states = next_states;
+  }
+  for (const auto& state : current_states) {
+    if (final_states_.count(state)) {
+      return true;
+    }
+  }
+  return false;
+}
+

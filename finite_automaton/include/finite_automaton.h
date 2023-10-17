@@ -13,36 +13,39 @@
 #include <iostream>
 #include <map>
 #include <string>
-#include <vector>
+#include <set>
+
 
 #include "alphabet.h"
 #include "state.h"
 
+
 class FiniteAutomaton {
  public:
   // Constructor
-  FiniteAutomaton(const Alphabet& alphabet, int number_states, const State& start_state) 
-    : alphabet_(alphabet), number_states_(number_states), start_state_(start_state) {}  
+  FiniteAutomaton(const Alphabet& alphabet) 
+    : alphabet_(alphabet) {}  
 
   // Getters 
-  inline const Alphabet GetAlphabet() const { return; }
-  inline const int GetNumberStates() const { return; }
-  inline const State GetStartState() const { return; }
-  inline const std::map<State, std::vector<State>> GetStates() const { return; }
-  inline const std::map<std::pair<State, State>, char> GetTransitions() const { return; }
+  inline const Alphabet GetAlphabet() const { return alphabet_; }
+  inline const int GetNumberStates() const { return states_.size(); }
+  inline const State GetInitialState() const { return initial_state_; }
+  inline const std::map<State, std::set<State>> GetStates() const { return states_; }
+  inline const std::map<std::pair<State, State>, std::set<char>> GetTransitions() const { return transitions_; }
 
   // Methods
-  bool AddState(const State& state);
-  bool AddTransition(const State& from, const State& to, const char& condition);
-  
-
+  void AddState(const State& state);
+  void AddTransition(const State& from, const State& to, const char& condition);
+  void SetFinal(const State& state);
+  void SetInitial(const State& state);
+  bool Crawl(const std::string&  input);
   
 
  private:
   Alphabet alphabet_;
-  int number_states_;
-  State start_state_;
-  std::map<State, std::vector<State>> states_;
+  State initial_state_;
+  std::set<State> final_states_;
+  std::map<State, std::set<State>> states_;
   std::map<std::pair<State, State>, std::set<char>> transitions_;
 };
 

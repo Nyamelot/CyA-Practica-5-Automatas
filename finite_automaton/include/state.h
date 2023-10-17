@@ -15,18 +15,18 @@
 #include <vector>
 #include <string>
 
-#include "transition.h"
 
 class State {
  public:
   // Constructor
+  State() : id_("") {}
   State(std::string id) : id_(id) {}
     
  
-  bool operator>(const State& state1);
-  bool operator<(const State& state1);
-  bool operator==(const State& state1);
-  bool operator!=(const State& state1);
+  bool operator>(const State& state1) const;
+  bool operator<(const State& state1) const;
+  bool operator==(const State& state1) const;
+  bool operator!=(const State& state1) const;
 
  private:
   std::string id_;
