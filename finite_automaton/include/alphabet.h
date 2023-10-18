@@ -6,6 +6,7 @@
 // Autor: José Ángel Portillo García
 // Correo: alu0101568232@ull.edu.es
 // Fecha: 13/10/2023
+// Archivo alphabet.h: Contiene la clase Alphabet que representa el alfabeto de un automata finito
 
 #ifndef ALPHABET_H
 #define ALPHABET_H
@@ -21,7 +22,7 @@ class Alphabet {
   
   Alphabet(std::string strings) {
     for (const auto& symbol : strings) {
-      if (symbol != ' ') {
+      if (symbol != ' ' || symbol != '&') {
         alphabet_.emplace(symbol);
       }
     }

@@ -6,6 +6,7 @@
 // Autor: José Ángel Portillo García
 // Correo: alu0101568232@ull.edu.es
 // Fecha: 13/10/2023
+// Archivo state.h: Contiene la clase State que representa un estado de un autómata finito
 
 #ifndef STATE_H
 #define STATE_H
@@ -15,13 +16,13 @@
 #include <vector>
 #include <string>
 
-
+/// ## Descripción
+/// Clase que representa un estado de un autómata finito
 class State {
  public:
   // Constructor
   State() : id_("") {}
   State(std::string id) : id_(id) {}
-    
  
   bool operator>(const State& state1) const;
   bool operator<(const State& state1) const;

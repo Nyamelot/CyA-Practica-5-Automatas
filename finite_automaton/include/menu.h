@@ -6,5 +6,13 @@
 // Autor: José Ángel Portillo García
 // Correo: alu0101568232@ull.edu.es
 // Fecha: 13/10/2023
+// Archivo menu.h: Contiene la declaración de las funciones de menu.cc
 
-void Usage(int argc, char* argv);
+#include <vector>
+#include <string>
+#include <fstream>
+#include <iostream>
+
+void Usage(int argc, char* argv[]);
+std::vector<std::string> FileReader(std::ifstream& input_files);
+std::vector<std::string> NoSpacesStrings(const std::vector<std::string>& strings);

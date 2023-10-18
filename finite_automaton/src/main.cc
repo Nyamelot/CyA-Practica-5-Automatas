@@ -6,25 +6,24 @@
 // Autor: José Ángel Portillo García
 // Correo: alu0101568232@ull.edu.es
 // Fecha: 13/10/2023
+// Archivo main.cc: programa principal
 
 #include <iostream>
-
+#include <fstream>
+#include <iomanip>
 
 #include "finite_automaton.h"
+#include "menu.h"
 
 int main(int argc, char* argv[]) {
-  // auto automaton = FiniteAutomaton::CreateFromFile(argv[1]);
-  auto automaton = FiniteAutomaton(Alphabet(""));
-  automaton.AddTransition(State("q0"), State("q0"), '0');
-  automaton.AddTransition(State("q0"), State("q0"), '1');
-  automaton.AddTransition(State("q0"), State("q1"), '1');
-  automaton.AddTransition(State("q1"), State("q2"), '0');
-  automaton.AddTransition(State("q1"), State("q2"), '1');
-  automaton.AddTransition(State("q2"), State("q3"), '0');
-  automaton.AddTransition(State("q2"), State("q3"), '1');
-  automaton.SetFinal(State("q3"));
-  automaton.SetInitial(State("q0"));
-  std::cout << automaton.Crawl("&") << std::endl;
-
+  Usage(argc, argv);
+  std::ifstream input_automaton_file(argv[1]);
+  auto automaton = FiniteAutomaton::CreateFromFile(input_automaton_file);
+  std::ifstream input_string_file(argv[2]);
+  for (std::string line; std::getline(input_string_file, line);) {
+    std::cout << std::left << std::setw(10) << line << ": ";
+    std::cout << std::setw(10) << (automaton.Crawl(line) ? "Accepted 😊" : "Rejected 😔") << std::endl;
+  }
+ 
   return 0;
 }

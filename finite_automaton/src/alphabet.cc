@@ -6,6 +6,7 @@
 // Autor: José Ángel Portillo García
 // Correo: alu0101568232@ull.edu.es
 // Fecha: 13/10/2023
+// Archivo alphabet.cc: contiene la implementación de los métodos de la clase
 
 #include <iostream>
 
