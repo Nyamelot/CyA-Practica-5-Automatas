@@ -42,8 +42,11 @@ class FiniteAutomaton {
   void SetFinal(const State& state);
   void SetInitial(const State& state);
   bool Crawl(const std::string&  input);
-
   static FiniteAutomaton CreateFromFile(std::ifstream& input_file);
+
+  // Modification
+  std::set<State> DeadState();
+
 
  private:
   Alphabet alphabet_;

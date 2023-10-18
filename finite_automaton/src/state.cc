@@ -27,3 +27,8 @@ bool State::operator==(const State& state1) const {
 bool State::operator!=(const State& state1) const {
   return id_ != state1.id_;
 }
+
+std::ostream& operator<<(std::ostream& out, const State& state) {
+  out << state.id_;
+  return out;
+}

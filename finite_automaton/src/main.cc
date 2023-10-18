@@ -14,6 +14,7 @@
 
 #include "finite_automaton.h"
 #include "menu.h"
+#include "state.h"
 
 int main(int argc, char* argv[]) {
   Usage(argc, argv);
@@ -24,6 +25,16 @@ int main(int argc, char* argv[]) {
     std::cout << std::left << std::setw(10) << line << ": ";
     std::cout << std::setw(10) << (automaton.Crawl(line) ? "Accepted 😊" : "Rejected 😔") << std::endl;
   }
- 
+
+  // Modification
+  std::set<State> dead_states = automaton.DeadState();
+  if (dead_states.size() != 0) {
+    std::cout << "The dead states are: " << std::endl;
+    for (const auto& dead_state : dead_states) {
+      std::cout << dead_state << std::endl;
+    }
+  } else {
+    std::cout << "There are no dead states" << std::endl;
+  }
   return 0;
 }

@@ -28,6 +28,7 @@ class State {
   bool operator<(const State& state1) const;
   bool operator==(const State& state1) const;
   bool operator!=(const State& state1) const;
+  friend std::ostream& operator<<(std::ostream& out, const State& state);
 
  private:
   std::string id_;

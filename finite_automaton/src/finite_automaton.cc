@@ -166,3 +166,21 @@ FiniteAutomaton FiniteAutomaton::CreateFromFile(std::ifstream& input_file) {
   }
   return result;
 }
+
+//Modification
+std::set<State> FiniteAutomaton::DeadState() {
+  std::set<State> dead_states;
+  for (const auto& state : states_) {
+    int counter = 0;
+    for (const auto& adyecent : state.second) {
+    //   if (state.first == adyecent) {
+        
+    //  } 
+      if (counter = state.second.size()) {
+        dead_states.emplace(adyecent);
+      }
+      counter++;
+    }
+  }
+  return dead_states;
+}
