@@ -25,10 +25,11 @@ int main(int argc, char* argv[]) {
     std::cout << std::left << std::setw(10) << line << ": ";
     std::cout << std::setw(10) << (automaton.Crawl(line) ? "Accepted 😊" : "Rejected 😔") << std::endl;
   }
-
+  std::cout << std::endl;
   // Modification
-  std::set<State> dead_states = automaton.DeadState();
-  if (dead_states.size() != 0) {
+  std::set<State> dead_states;
+  dead_states = automaton.DeadState();
+  if (!dead_states.empty()) {
     std::cout << "The dead states are: " << std::endl;
     for (const auto& dead_state : dead_states) {
       std::cout << dead_state << std::endl;

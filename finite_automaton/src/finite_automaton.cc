@@ -33,6 +33,14 @@ void FiniteAutomaton::AddState(const State& state) {
 /// ## Argumentos
 /// * `from` - Estado de partida
 void FiniteAutomaton::AddTransition(const State& from, const State& to, const char& condition) {
+  bool exist_alphabet = false;
+  for (const auto& alphabet_symbols : alphabet_.GetAlphabet()) {
+  if (condition == alphabet_symbols || condition == '&') exist_alphabet = true;
+  }
+  if (!exist_alphabet) {
+    std::cerr << "The condition doesnt match the alphabet" << std::endl;
+    exit(EXIT_FAILURE);
+  }
   if (!states_.count(from)) {
     AddState(from);
   }
@@ -168,19 +176,25 @@ FiniteAutomaton FiniteAutomaton::CreateFromFile(std::ifstream& input_file) {
 }
 
 //Modification
-std::set<State> FiniteAutomaton::DeadState() {
-  std::set<State> dead_states;
-  for (const auto& state : states_) {
-    int counter = 0;
-    for (const auto& adyecent : state.second) {
-    //   if (state.first == adyecent) {
-        
-    //  } 
-      if (counter = state.second.size()) {
-        dead_states.emplace(adyecent);
-      }
-      counter++;
+bool FiniteAutomaton::IsFinalState(const State& state) {
+  for (const auto& final_state : final_states_) {
+    if (state == final_state) {
+      return true;
     }
+  }
+  return false;
+}
+
+
+std::set<State> FiniteAutomaton::DeadState() {
+  std::set<State> dead_states{};
+  for (const auto& state : states_) {
+    for (const auto& adyecent : state.second) {
+      if ((state.first == adyecent) && (state.second.size() == 1)
+          && (!IsFinalState(state.first))) {
+        dead_states.emplace(state.first);
+      }
+    }  
   }
   return dead_states;
 }

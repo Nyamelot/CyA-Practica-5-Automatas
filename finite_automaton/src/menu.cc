@@ -8,7 +8,14 @@
 // Fecha: 13/10/2023
 // Archivo menu.cc: Contiene la implementación de la clase Menu.
 
+#include <iostream>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <iomanip>
+
 #include "menu.h"
+#include "finite_automaton.h"
 
 const std::string kTitle = "P05-finite-automaton";
 const std::string kHelpText =

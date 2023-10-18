@@ -46,6 +46,7 @@ class FiniteAutomaton {
 
   // Modification
   std::set<State> DeadState();
+  bool IsFinalState(const State& state);
 
 
  private:

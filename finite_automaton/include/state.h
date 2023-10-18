@@ -23,7 +23,11 @@ class State {
   // Constructor
   State() : id_("") {}
   State(std::string id) : id_(id) {}
- 
+  
+  // Getter
+  const std::string GetId() const { return id_; }
+
+  // Operator Overloading
   bool operator>(const State& state1) const;
   bool operator<(const State& state1) const;
   bool operator==(const State& state1) const;
