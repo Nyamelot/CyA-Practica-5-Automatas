@@ -43,6 +43,9 @@ class FiniteAutomaton {
   void SetInitial(const State& state);
   bool Crawl(const std::string&  input);
   static FiniteAutomaton CreateFromFile(std::ifstream& input_file);
+  
+  // Methods PR6
+  std::set<State> EpsilonClosure(std::set<State> initial_states);
 
   // Modification
   std::set<State> DeadState();

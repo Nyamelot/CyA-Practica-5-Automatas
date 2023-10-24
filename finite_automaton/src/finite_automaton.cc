@@ -175,7 +175,7 @@ FiniteAutomaton FiniteAutomaton::CreateFromFile(std::ifstream& input_file) {
   return result;
 }
 
-//Modification
+// Modification
 bool FiniteAutomaton::IsFinalState(const State& state) {
   for (const auto& final_state : final_states_) {
     if (state == final_state) {
@@ -198,3 +198,17 @@ std::set<State> FiniteAutomaton::DeadState() {
   }
   return dead_states;
 }
+
+// PR6 Methods
+std::set<State> FiniteAutomaton::EpsilonClosure(std::set<States> initial_states) {
+  std::set<State> epsilon_closure{};
+  for (const auto& transition : transitions_) {
+    for (const auto& condition : transition.second) {
+      if (condition == '&') {
+        epsilon_closure.emplace(transition.first.first);
+      }
+    }
+  }
+  return epsilon_closure;
+}
+
