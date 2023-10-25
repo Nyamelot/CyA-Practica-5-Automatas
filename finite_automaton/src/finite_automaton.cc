@@ -11,6 +11,8 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <queue>
+#include <stack>
 
 #include "finite_automaton.h"
 #include "state.h"
@@ -200,15 +202,112 @@ std::set<State> FiniteAutomaton::DeadState() {
 }
 
 // PR6 Methods
-std::set<State> FiniteAutomaton::EpsilonClosure(std::set<States> initial_states) {
-  std::set<State> epsilon_closure{};
-  for (const auto& transition : transitions_) {
-    for (const auto& condition : transition.second) {
-      if (condition == '&') {
-        epsilon_closure.emplace(transition.first.first);
+std::set<State> FiniteAutomaton::EpsilonClosure(const std::set<State>& initial_states) {
+  std::set<State> result = initial_states;
+  for (const auto& state : initial_states) {
+    for (const auto& adyecent : states_.at(state)) {
+      if (transitions_.at({state, adyecent}).count('&')) {
+        if (!result.count(adyecent)) {
+          result.emplace(adyecent);
+        }
       }
     }
   }
-  return epsilon_closure;
+  if (result.size() == initial_states.size()) {
+    return result;
+  }
+  return EpsilonClosure(result);
 }
 
+std::set<State> FiniteAutomaton::Move(const std::set<State>& initial_states, const char condition) {
+  std::set<State> result;
+  for (const auto& state : initial_states) {
+    for (const auto& adyecent : states_.at(state)) {
+      if (transitions_.at({state, adyecent}).count(condition)) {
+        result.emplace(adyecent);
+      }
+    }
+  }
+  return result;
+}
+
+bool FiniteAutomaton::HasState(State state) {
+  for (const auto& state_automata : states_) {
+    if (state != state_automata.first) return false;
+  }
+  return true;
+}
+
+
+FiniteAutomaton FiniteAutomaton::NfaToDfa() {
+  FiniteAutomaton dfa(alphabet_);
+
+  // Create the start state of the DFA as the epsilon closure of the NFA's start state
+  std::set<State> start_state = EpsilonClosure(std::set<State>{initial_state_});
+  dfa.AddState(State("0"));
+  dfa.SetInitial(State("0"));
+
+  std::queue<std::pair<std::set<State>, State>> unmarked_states;
+  // std::set<std::set<State>> marked_states;
+  std::map<std::set<State>, State> state_map;
+  unmarked_states.push(std::make_pair(start_state, State("0")));
+  state_map.insert({ start_state, State("0") });
+
+  int id = dfa.GetNumberStates();
+  while (!unmarked_states.empty()) {
+    auto current_state = unmarked_states.front();
+    unmarked_states.pop();
+    for (const auto& symbol : alphabet_.GetAlphabet()) {
+      auto next_state = EpsilonClosure(Move(current_state.first, symbol));
+      if (next_state.size() > 0) {
+        dfa.AddTransition(current_state.second, State(std::to_string(id)), symbol);
+        if (!state_map.count(next_state)) {
+          unmarked_states.push(std::make_pair(next_state, State(std::to_string(id))));
+          state_map.insert({next_state, State(std::to_string(id))});
+          id = dfa.GetNumberStates();
+        }
+        for (const auto& state : next_state) {
+          if (IsFinalState(state)) {
+            dfa.SetFinal(current_state.second);
+          }
+        }
+      }
+    }
+  }
+
+  return dfa;
+}
+
+int FiniteAutomaton::NumberOfTransitions(const State& state) {
+  int num_transitions = 0;
+  for (const auto& adjecent : states_.at(state)) {
+    for (const auto& symbol : transitions_.at(std::pair(state, adjecent))) {
+        num_transitions++;
+    }
+  }
+}
+
+std::ostream& operator<<(std::ostream& out, FiniteAutomaton automaton) {
+  out << automaton.alphabet_ << std::endl;
+  out << automaton.states_.size() << std::endl;
+  out << automaton.initial_state_ << std::endl;
+  for (const auto& state : automaton.states_) {
+    out << state.first << " ";
+    if (automaton.IsFinalState(state.first)) {
+      out << "1" << " ";
+    } else {
+      out << "0" << " ";
+    }
+    out << automaton.NumberOfTransitions(state.first) << " ";
+    if (automaton.NumberOfTransitions(state.first) > 0) {
+      for (const auto& adjecent : state.second) {
+        for(const auto& symbol : automaton.transitions_.at(std::pair (state.first, adjecent))) {
+          out << symbol << " " << adjecent << " ";
+        }
+      }
+
+    }
+  out << std::endl;
+  }
+  return out;
+}

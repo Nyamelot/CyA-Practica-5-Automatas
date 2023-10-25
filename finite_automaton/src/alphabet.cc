@@ -13,15 +13,8 @@
 #include "alphabet.h"
 
 std::ostream& operator<<(std::ostream& out, const Alphabet& alphabet) {
-  out << "{";
-  bool comma = true;
    for (const auto& symbol : alphabet.GetAlphabet()) {
-     if (!comma) {
-      out << ", ";
-     }
-     out << symbol;
-     comma = false;
+     out << symbol << " ";
    }
-  out << "}";
   return out;
 }

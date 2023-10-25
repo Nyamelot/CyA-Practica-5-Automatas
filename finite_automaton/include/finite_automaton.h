@@ -45,7 +45,14 @@ class FiniteAutomaton {
   static FiniteAutomaton CreateFromFile(std::ifstream& input_file);
   
   // Methods PR6
-  std::set<State> EpsilonClosure(std::set<State> initial_states);
+  std::set<State> EpsilonClosure(const std::set<State>& initial_states);
+  std::set<State> Move(const std::set<State>& initial_states, const char condition);
+  FiniteAutomaton NfaToDfa();
+  bool HasState(State state);
+  int NumberOfTransitions(const State& state);
+
+  // Operator Overload
+  friend std::ostream& operator<<(std::ostream& out, FiniteAutomaton automaton);
 
   // Modification
   std::set<State> DeadState();
